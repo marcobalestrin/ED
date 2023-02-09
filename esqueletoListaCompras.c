@@ -119,6 +119,11 @@ Item *query(Item *item, char produto[50])
 // Permite excluir um item de uma lista de compras
 Item *delete(Item *item, char produto[50])
 {
+     if (query(item,produto)==NULL)          
+     {
+          printf("Item nao encontrado!!!\n");
+          return NULL;
+     }
      if (item == NULL)
      {
           printf("Item nao encontrado!!!\n");
@@ -222,7 +227,6 @@ void intersect(Item *itemA, Item *itemB, Lista *lista)
           return;
 
      intersect(itemA->esquerdo, itemB, lista);
-     // addLista(query(itemB, itemA->produto), lista);
      if (query(itemB, itemA->produto))
      {
 
@@ -252,7 +256,6 @@ int main()
      Lista *lista;
      ItemLista *auxi;
      lista = malloc(sizeof(Lista));
-     //inicializaLista(lista);
      lista->primeiro = NULL;
 
      opcao1 = 0;
@@ -298,19 +301,30 @@ int main()
                          scanf("%d", &quant);
                          aux = update(raizA, produto, quant);
                          if (aux != NULL)
-                              printf("%s foi atualizado para quantidade = %d!\n", produto, quant);
+                              printf("\n%s foi atualizado para quantidade = %d!", produto, quant);
                          else
-                              printf("Produto nao encontrado!!!");
+                              printf("\nProduto nao encontrado!!!");
                          break;
                     case 4:
-                         list(raizA);
+                         if(raizA==NULL)
+                              printf("\nLista A vazia!!!");
+                         else
+                              list(raizA);
                          break;
                     case 5:
-                         // printf("ESQUERDA %s, DIREITA %s", raizA->esquerdo->produto, raizA->direito->produto);
                          printf("Nome do produto:");
                          scanf("%s", produto);
+                         if(strcmp(raizA->produto, produto)==0){
+                              printf("\n%s foi deletado de sua lista", produto);
+                              free(raizA);
+                              raizA = NULL;
+                              break;
+                         }
+
                          if (delete (raizA, produto) != NULL)
-                              printf("%s foi deletado de sua lista", produto);
+                              printf("\n%s foi deletado de sua lista", produto);
+                         
+
                     }
                }
                break;
@@ -349,18 +363,29 @@ int main()
                          scanf("%d", &quant);
                          aux = update(raizB, produto, quant);
                          if (aux != NULL)
-                              printf("%s foi atualizado para quantidade = %d!\n", aux->produto, aux->quantidade);
+                              printf("\n%s foi atualizado para quantidade = %d!\n", aux->produto, aux->quantidade);
                          else
-                              printf("Produto nao encontrado!!!");
+                              printf("\nProduto nao encontrado!!!");
                          break;
                     case 4:
+                         if(raizB==NULL)
+                              printf("\nLista B vazia!!!");
+                         else
                          list(raizB);
                          break;
                     case 5:
                          printf("Nome do produto:");
                          scanf("%s", produto);
+                        if(strcmp(raizB->produto, produto)==0){
+                              printf("\n%s foi deletado de sua lista", produto);
+                              free(raizB);
+                              raizA = NULL;
+                              break;
+                         }
+
                          if (delete (raizB, produto) != NULL)
-                              printf("%s foi deletado de sua lista", produto);
+                              printf("\n%s foi deletado de sua lista", produto);
+                         
                     }
                }
                break;
